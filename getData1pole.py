@@ -72,9 +72,10 @@ while count<len(x):
 		query1 = query
 conn.close()
 
+rows = []
 for res in results:
 	for r in res:
-		f.write(str(r[1])+'\t'+str(r[2])+'\t'+str(r[3])+'\t'+str(r[4])+'\n')
+		rows.append([str(r[1]),str(r[2]),str(r[3]),str(r[4])])
 
 quantityName = {}
 aptName = {}
@@ -118,8 +119,8 @@ s2 = ''
 s3= ''
 s4 = ''
 s5 = ''
-g = open('error.txt','w')
-for line in open('1poleData.txt','r'):
+
+for line in rows:
 	if count%100000==0:
 		if s1.endswith('values')==False and s1!='':
 			try:
@@ -127,7 +128,7 @@ for line in open('1poleData.txt','r'):
 				cursor.execute(s1)
 				conn.commit()
 			except mysql.connector.Error as err:
-				g.write(s1)
+				cursor.execute(s1)
 				print(err)
 
 		if s2.endswith('values')==False and s2!='':
@@ -152,7 +153,6 @@ for line in open('1poleData.txt','r'):
 		s4 = "INSERT into METER_READINGS (apartment_id, column_structure, "+"TotalkWh"+",timelocal) values"
 		s5 = "INSERT into METER_READINGS (apartment_id, column_structure, "+"LineFreq"+",timelocal) values"
 		print('100K INSERTED, Batch',count)
-	line = line.strip().split('\t')
 	apartment = aptName[line[2]]
 	colname =  quantityName[line[2]]
 	colvalue = line[0]

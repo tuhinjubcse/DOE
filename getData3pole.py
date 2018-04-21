@@ -69,9 +69,10 @@ while count<len(x):
 		query1 = query
 conn.close()
 
+rows = []
 for res in results:
 	for r in res:
-		f.write(str(r[1])+'\t'+str(r[2])+'\t'+str(r[3])+'\t'+str(r[4])+'\n')
+		rows.append([str(r[1]),str(r[2]),str(r[3]),str(r[4])])
 
 
 quantityName = {}
@@ -129,8 +130,8 @@ s5 = ''
 s6 =''
 s7 = ''
 
-for line in open('3poleData.txt','r'):
-	if line.strip().split('\t')[1] in ['239','254','233','229']:
+for line in rows:
+	if line[1] in ['239','254','233','229']:
 		if count%100000==0:
 			if s1.endswith('values')==False and s1!='':
 				s1 = s1[:-1]+ "ON DUPLICATE KEY UPDATE apartment_id=VALUES(apartment_id), column_structure=VALUES(column_structure), Ph1Amps=VALUES(Ph1Amps),timelocal=VALUES(timelocal)"
@@ -168,7 +169,6 @@ for line in open('3poleData.txt','r'):
 			s6 = "INSERT into METER_READINGS (apartment_id, column_structure, "+"Ph2kW"+",timelocal) values"
 			s7 = "INSERT into METER_READINGS (apartment_id, column_structure, "+"TotalkWh"+",timelocal) values"
 			print('100K INSERTED, Batch',count)
-		line = line.strip().split('\t')
 		apartment = aptName[line[2]]
 		colname =  quantityName[line[2]]
 		colvalue = line[0]
@@ -234,8 +234,8 @@ s8 = ''
 s9 = ''
 s10 = ''
 
-for line in open('3poleData.txt','r'):
-	if not line.strip().split('\t')[1] in ['239','254','233','229']:
+for line in rows:
+	if not line[1] in ['239','254','233','229']:
 		if count%100000==0:
 			if s1.endswith('values')==False and s1!='':
 				s1 = s1[:-1]+ "ON DUPLICATE KEY UPDATE apartment_id=VALUES(apartment_id), column_structure=VALUES(column_structure), Ph1Amps=VALUES(Ph1Amps),timelocal=VALUES(timelocal)"
@@ -288,7 +288,6 @@ for line in open('3poleData.txt','r'):
 			s9 = "INSERT into METER_READINGS (apartment_id, column_structure, "+"Ph3kW"+",timelocal) values"
 			s10 = "INSERT into METER_READINGS (apartment_id, column_structure, "+"TotalkWh"+",timelocal) values"
 			print('100K INSERTED, Batch',count)
-		line = line.strip().split('\t')
 		apartment = aptName[line[2]]
 		colname =  quantityName[line[2]]
 		colvalue = line[0]
